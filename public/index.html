@@ -3,271 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Chat App</title>
+    <title>🌿 GreenRoom</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-
-        #chatContainer {
-            display: none;
-        }
-
-        #messages {
-            height: 450px;
-            border: 1px solid #ccc;
-            overflow-y: auto;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        .message {
-            margin-bottom: 10px;
-            padding: 8px;
-            border-radius: 6px;
-            background: #f4f4f4;
-        }
-
-        .system {
-            background: #e3f2fd;
-            font-style: italic;
-        }
-
-        input {
-            padding: 10px;
-        }
-
-        button {
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        #messageInput {
-            width: 70%;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-    <h1>Simple Chat App 🚀</h1>
+    <div class="overlay"></div>
 
-    <h3 id="onlineUsers">
-        Online Users: 0
-    </h3>
+    <main class="app">
 
-    <div id="joinContainer">
-        <input
-            type="text"
-            id="username"
-            placeholder="Enter Username"
-        />
+        <header class="header">
 
-        <button id="joinBtn">
-            Join Chat
-        </button>
-    </div>
+            <div class="branding">
+                <h1>🌿 GreenRoom</h1>
+                <p>Where conversations grow</p>
+            </div>
 
-    <div id="chatContainer">
+            <div class="online-pill">
+                <span class="dot"></span>
+                <span id="onlineUsers">Online: 0</span>
+            </div>
 
-        <div id="messages"></div>
+        </header>
 
-        <input
-            type="text"
-            id="messageInput"
-            placeholder="Type your message"
-        />
+        <div id="joinContainer" class="join-card">
 
-        <button id="sendBtn">
-            Send
-        </button>
+            <h2>Welcome</h2>
 
-        <button id="logoutBtn">
-            Logout
-        </button>
+            <p>Choose a username to join the room.</p>
 
-    </div>
+            <div class="join-row">
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter Username"
+                >
+
+                <button id="joinBtn">
+                    Join
+                </button>
+
+            </div>
+
+        </div>
+
+        <section
+            id="chatContainer"
+            class="chat-card"
+        >
+
+            <div id="messages"></div>
+
+            <div class="input-area">
+
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Type your message..."
+                >
+
+                <button id="sendBtn">
+                    ➤
+                </button>
+
+                <button id="logoutBtn">
+                    Logout
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
 
     <script src="/socket.io/socket.io.js"></script>
-
-    <script>
-
-        const socket = io();
-
-        const joinBtn =
-            document.getElementById("joinBtn");
-
-        const usernameInput =
-            document.getElementById("username");
-
-        const joinContainer =
-            document.getElementById("joinContainer");
-
-        const chatContainer =
-            document.getElementById("chatContainer");
-
-        const onlineUsers =
-            document.getElementById("onlineUsers");
-
-        const sendBtn =
-            document.getElementById("sendBtn");
-
-        const logoutBtn =
-            document.getElementById("logoutBtn");
-
-        const messageInput =
-            document.getElementById("messageInput");
-
-        const messagesContainer =
-            document.getElementById("messages");
-
-        let currentUsername = "";
-
-        function formatTime(timestamp) {
-
-    const date = new Date(timestamp);
-
-    return date.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-
-}
-
-        function addMessage(content, isSystem = false) {
-
-            const div =
-                document.createElement("div");
-
-            div.classList.add("message");
-
-            if (isSystem) {
-                div.classList.add("system");
-            }
-
-            div.innerHTML = content;
-
-            messagesContainer.appendChild(div);
-
-            messagesContainer.scrollTop =
-                messagesContainer.scrollHeight;
-        }
-
-        function joinChat(username) {
-
-            currentUsername = username;
-
-            localStorage.setItem(
-                "username",
-                username
-            );
-
-            socket.emit("join-chat", {
-                username,
-            });
-
-            joinContainer.style.display = "none";
-            chatContainer.style.display = "block";
-        }
-
-        // Auto Login
-        const savedUsername =
-            localStorage.getItem("username");
-
-        if (savedUsername) {
-
-            joinChat(savedUsername);
-
-        }
-
-        joinBtn.addEventListener("click", () => {
-
-            const username =
-                usernameInput.value.trim();
-
-            if (!username) {
-                alert("Enter username");
-                return;
-            }
-
-            joinChat(username);
-        });
-
-        sendBtn.addEventListener("click", () => {
-
-            const message =
-                messageInput.value.trim();
-
-            if (!message) {
-                return;
-            }
-
-            socket.emit("send-message", {
-                message,
-            });
-
-            messageInput.value = "";
-        });
-
-        messageInput.addEventListener("keypress", (e) => {
-
-            if (e.key === "Enter") {
-
-                sendBtn.click();
-
-            }
-
-        });
-
-        logoutBtn.addEventListener("click", () => {
-
-            localStorage.removeItem("username");
-
-            location.reload();
-        });
-
-        socket.on("receive-message", (data) => {
-
-  addMessage(
-    `[${formatTime(data.createdAt)}] <strong>${data.username}</strong>: ${data.message}`
-);
-        });
-
-        socket.on("online-users", (data) => {
-
-            onlineUsers.textContent =
-                `Online Users: ${data.count}`;
-
-        });
-
-        socket.on("user-joined", (data) => {
-
-            addMessage(
-                data.message,
-                true
-            );
-
-        });
-
-        socket.on("chat-history", (messages) => {
-
-            messagesContainer.innerHTML = "";
-
-            messages.reverse();
-
-            messages.forEach((msg) => {
-
-                addMessage(
-    `[${formatTime(msg.createdAt)}] <strong>${msg.username}</strong>: ${msg.content}`
-);
-            });
-
-        });
-
-    </script>
+    <script src="./script.js"></script>
 
 </body>
 </html>

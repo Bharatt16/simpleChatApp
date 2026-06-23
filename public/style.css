@@ -1,0 +1,361 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --light:#EEEEEE;
+    --green-light:#6FCF97;
+    --green:#2FA084;
+    --green-dark:#1F6F5F;
+}
+
+body{
+    min-height:100vh;
+
+    font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+
+    background-image:
+    url("./assets/greenBg-2.jpg");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    color:var(--light);
+
+    overflow:hidden;
+
+    position:relative;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+
+    background:
+    rgba(0,0,0,.35);
+
+    z-index:1;
+}
+
+.app{
+    position:relative;
+    z-index:2;
+
+    width:min(1100px,95%);
+    height:100vh;
+
+    margin:auto;
+
+    display:flex;
+    flex-direction:column;
+
+    padding:25px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.branding h1{
+    font-size:2rem;
+    color:var(--green-light);
+}
+
+.branding p{
+    margin-top:4px;
+    opacity:.8;
+}
+
+.online-pill{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 18px;
+
+    background:
+    rgba(255,255,255,.08);
+
+    /* backdrop-filter:blur(14px); */
+
+    border-radius:999px;
+
+    border:
+    1px solid rgba(255,255,255,.1);
+}
+
+.dot{
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:var(--green-light);
+
+    box-shadow:
+    0 0 10px var(--green-light);
+}
+
+.join-card,
+.chat-card{
+
+    background:
+    rgba(31,111,95,.35);
+
+    /* backdrop-filter:blur(16px); */
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:24px;
+}
+
+.join-card{
+    width:min(650px,100%);
+
+    margin:auto;
+
+    padding:35px;
+    text-align:center;
+}
+
+.join-card h2{
+    margin-bottom:10px;
+}
+
+.join-card p{
+    opacity:.8;
+    margin-bottom:20px;
+}
+
+.join-row{
+    display:flex;
+    gap:10px;
+    justify-content: space-between;
+}
+
+.chat-card{
+    display:none;
+
+    flex:1;
+    min-height:0;
+
+    overflow:hidden;
+
+    flex-direction:column;
+}
+
+#messages{
+    flex:1;
+    min-height:0;
+
+    overflow-y:auto;
+
+    padding:20px;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:14px;
+}
+
+#messages::-webkit-scrollbar{
+    width:8px;
+}
+
+#messages::-webkit-scrollbar-thumb{
+    background:var(--green);
+    border-radius:999px;
+}
+
+.message{
+    max-width:75%;
+
+    padding:14px 16px;
+
+    border-radius:18px;
+
+    animation:fadeUp .2s ease;
+}
+
+.my-message{
+    align-self:flex-end;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--green),
+        var(--green-dark)
+    );
+
+    color:white;
+}
+
+.other-message{
+    align-self:flex-start;
+
+    background:
+    rgba(255,255,255,.12);
+
+    color:var(--light);
+}
+
+.system-message{
+    align-self:center;
+
+    max-width:100%;
+
+    background:
+    rgba(111,207,151,.15);
+
+    color:var(--green-light);
+
+    font-style:italic;
+}
+
+.message-header{
+    display:flex;
+    gap:10px;
+
+    margin-bottom:6px;
+
+    font-size:.85rem;
+}
+
+.message-user{
+    font-weight:700;
+}
+
+.message-time{
+    opacity:.7;
+}
+
+.message-content{
+    line-height:1.5;
+}
+
+.input-area{
+    display:flex;
+    gap:10px;
+
+    padding:20px;
+
+    border-top:
+    1px solid rgba(255,255,255,.08);
+}
+
+input{
+    border:none;
+    outline:none;
+
+    background:
+    rgba(255,255,255,.08);
+
+    color:var(--light);
+
+    border:
+    1px solid rgba(255,255,255,.08);
+
+    border-radius:14px;
+
+    padding:14px 16px;
+    flex: 1;
+}
+
+input::placeholder{
+    color:rgba(255,255,255,.5);
+}
+
+#messageInput{
+    flex:1;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+
+    border-radius:14px;
+
+    padding:14px 18px;
+
+    font-weight:600;
+
+    transition:.25s;
+}
+
+#joinBtn,
+#sendBtn{
+    background:var(--green);
+    color:white;
+}
+
+#logoutBtn{
+    background:
+    rgba(255,255,255,.1);
+
+    color:white;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+#joinBtn:hover,
+#sendBtn:hover{
+    background:var(--green-light);
+}
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+@media(max-width:768px){
+
+    body{
+        background-image:
+        url("./assets/greenPhone.jpg");
+    }
+
+    .header{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+
+    .join-row{
+        flex-direction:column;
+    }
+
+    .input-area{
+        flex-wrap:wrap;
+    }
+
+    #messageInput{
+        width:100%;
+    }
+
+    .message{
+        max-width:90%;
+    }
+
+}
