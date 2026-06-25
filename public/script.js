@@ -106,44 +106,22 @@ function addChatMessage(
 /* -------------------------------- */
 /* Join Chat                        */
 /* -------------------------------- */
-
-function joinChat(username) {
-
-    currentUsername = username;
-
-    localStorage.setItem(
-        "username",
-        username
-    );
-
-    socket.emit("join-chat", {
-        username,
-    });
-
-    joinContainer.style.display =
-        "none";
-
-    chatContainer.style.display =
-        "flex";
-}
-
 /* -------------------------------- */
 /* Auto Login                       */
 /* -------------------------------- */
 
 function joinChat(username) {
 
+    // console.log("Joining chat as:", username);
+
     currentUsername = username;
 
     socket.emit("join-chat", {
         username,
     });
 
-    joinContainer.style.display =
-        "none";
-
-    chatContainer.style.display =
-        "flex";
+    joinContainer.style.display = "none";
+    chatContainer.style.display = "flex";
 }
 
 /* -------------------------------- */
@@ -234,8 +212,8 @@ logoutBtn.addEventListener("click",() => {
 
 
     socket.onAny((event, ...args) => {
-    console.log("EVENT:", event);
-    console.log("DATA:", args);
+        // console.log("EVENT:", event);
+        // console.log("DATA:", args);
 });
 
 
@@ -297,5 +275,12 @@ socket.on("user-joined", (data) => {
     addSystemMessage(
         data.message
     );
+
+});
+
+
+socket.on("user-left",(data)=>{
+
+    addSystemMessage(data.message);
 
 });
